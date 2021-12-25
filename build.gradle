@@ -27,6 +27,24 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+jar {
+    //详细信息参考 https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Jar.html
+    archivesBaseName = 'MiniRPC'//基本的文件名
+    archivesVersion = '0.0.3' //版本
+    manifest { //配置jar文件的manifest
+        attributes(
+                "Manifest-Version": 1.0,
+                'Main-Class': 'App' //指定main方法所在的文件
+        )
+    }
+    //打包依赖包
+    from {
+        (configurations.runtimeClasspath).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
 // Define the main class for the application
 mainClassName = 'App'
 
