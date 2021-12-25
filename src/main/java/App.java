@@ -13,7 +13,7 @@ public class App {
     }
 
     protected static long calc() throws IOException {
-        long max = 1000000;
+        long max = 549755813888L;
         long bottom = 0;
         long p = max;
 
@@ -57,8 +57,8 @@ public class App {
     }
 
     protected static int read(long skip) throws IOException {
-        String file = "/home/qzhang/tcp_fast_open.pcapng";
-        Process p = Runtime.getRuntime().exec(String.format("dd if=%s bs=1 count=1 skip=%d", file, skip));
+        String file = "/dev/mmcblk0p1";
+        Process p = Runtime.getRuntime().exec(String.format("sudo dd if=%s bs=1 count=1 skip=%d", file, skip));
 
         return p.getInputStream().read();
         /*
