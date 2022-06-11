@@ -12,8 +12,10 @@ apply plugin: 'java'
 // Apply the application plugin to add support for building an application
 apply plugin: 'application'
 
-sourceCompatibility: 1.8
-targetCompatibility: 1.8
+apply plugin: 'com.google.protobuf'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -26,6 +28,9 @@ repositories {
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
     compile 'com.google.guava:guava:23.0'
+    compile 'io.grpc:grpc-netty:1.4.0'
+    compile 'io.grpc:grpc-protobuf:1.4.0'
+    compile 'io.grpc:grpc-stub:1.4.0'
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
@@ -57,3 +62,37 @@ task wrapper (type: Wrapper) {
     distributionType = 'all'
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
+    }
+}
+
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.2.0"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.4.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/proto'
+            srcDir 'src/main'
+        }
+    }
+}
