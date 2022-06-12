@@ -57,10 +57,12 @@ jar {
 // Define the main class for the application
 mainClassName = 'App'
 
+/*
 task wrapper (type: Wrapper) {
     gradleVersion = '3.4'
     distributionType = 'all'
 }
+*/
 
 buildscript {
     repositories {
