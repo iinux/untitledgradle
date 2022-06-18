@@ -27,4 +27,28 @@ public class StudentServiceImpl extends StudentServiceGrpc.StudentServiceImplBas
 
         responseObserver.onCompleted();
     }
+
+    @Override
+    public StreamObserver<StudentRequest> getStudentsWrapperByAges(StreamObserver<StudentResponseList> responseObserver) {
+        return new StreamObserver<StudentRequest>() {
+            @Override
+            public void onNext(StudentRequest value) {
+                System.out.println(value.getAge());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace();
+            }
+
+            @Override
+            public void onCompleted() {
+                StudentResponse s1 = StudentResponse.newBuilder().setName("张三").setAge(20).setCity("北京").build();
+                StudentResponse s2 = StudentResponse.newBuilder().setName("张三2").setAge(30).setCity("北京2").build();
+                responseObserver.onNext(StudentResponseList.newBuilder().addStudentResponse(s1).addStudentResponse(s2)
+                        .build());
+                responseObserver.onCompleted();
+            }
+        };
+    }
 }
