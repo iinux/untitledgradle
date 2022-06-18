@@ -3,6 +3,8 @@ package com.iinux.untitledgradle.protostudy;
 import com.iinux.untitledgradle.proto.*;
 import io.grpc.stub.StreamObserver;
 
+import java.util.UUID;
+
 public class StudentServiceImpl extends StudentServiceGrpc.StudentServiceImplBase {
     @Override
     public void getRealNameByUsername(MyRequest request, StreamObserver<MyResponse> responseObserver) {
@@ -47,6 +49,28 @@ public class StudentServiceImpl extends StudentServiceGrpc.StudentServiceImplBas
                 StudentResponse s2 = StudentResponse.newBuilder().setName("张三2").setAge(30).setCity("北京2").build();
                 responseObserver.onNext(StudentResponseList.newBuilder().addStudentResponse(s1).addStudentResponse(s2)
                         .build());
+                responseObserver.onCompleted();
+            }
+        };
+    }
+
+    @Override
+    public StreamObserver<StreamRequest> biTalk(StreamObserver<StreamResponse> responseObserver) {
+        return new StreamObserver<StreamRequest>() {
+            @Override
+            public void onNext(StreamRequest value) {
+                System.out.println(value.getRequestInfo());
+
+                responseObserver.onNext(StreamResponse.newBuilder().setResponseInfo(UUID.randomUUID().toString()).build());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace();
+            }
+
+            @Override
+            public void onCompleted() {
                 responseObserver.onCompleted();
             }
         };
